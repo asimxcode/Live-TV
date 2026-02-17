@@ -1,0 +1,551 @@
+[
+  {
+    "id": "jamuna-tv",
+    "name": "Jamuna TV",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThnVTGTS7dX3rjTijOIpVh-oUAnzdzKX_9-g&s",
+    "streamUrl": "http://160.22.105.17:8881/live/ch1/live.m3u8",
+    "priority": 1
+  },
+  {
+    "id": "somoy-tv",
+    "name": "Somoy TV",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiekmWp2YIQMurnkM-1prxkSspFRFbrI-BSw&s",
+    "streamUrl": "http://160.22.105.17:8881/live/ch2/live.m3u8",
+    "priority": 2
+  },
+  {
+    "id": "channel-24",
+    "name": "Channel 24",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://ecdn.dhakatribune.net/contents/cache/images/1200x630x1xxxxx1x694528/uploads/dten/2013/09/Channel24-TV-Bangladesh.jpg?watermark=media%2F2023%2F05%2F28%2F1280px-Dhaka_Tribune_Logo.svg-1-a9e61c86dded62d74300fef48fee558f.png",
+    "streamUrl": "http://160.22.105.17:8881/live/ch3/live.m3u8",
+    "priority": 3
+  },
+  {
+    "id": "71-tv",
+    "name": "Ekattor TV",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://cdn.ekattorbd.com/contents/cache/images/1200x630x1/uploads/media/2023/08/13/default-f5a63c8327b98eafee564f28c3a9ebdb.png",
+    "streamUrl": "http://160.22.105.17:8881/live/ch5/live.m3u8",
+    "priority": 4
+  },
+  {
+    "id": "atn-news",
+    "name": "ATN News",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://image.ghuddi.tv/uploads/images/2023/12/21/tv_covers_4062f694e7d8174bf13464efbc16f135_goplay_atn_news_1920_x_1080.png",
+    "streamUrl": "http://160.22.105.17:8881/live/ch6/live.m3u8",
+    "priority": 5
+  },
+  {
+    "id": "atn-bangla",
+    "name": "ATN Bangla",
+    "category": "Entertainment",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLkAaSWp4lqqpwzbneVWF_JtrMp6Co8igjkA&s",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8",
+    "priority": 6
+  },
+  {
+    "id": "independent-tv",
+    "name": "Independent TV",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://yt3.googleusercontent.com/JO8MicN497ze8WVXcu-wmA2WAMqhO8UIQhslV3VhiRu1kaQU3r9nOB4IVkmUt0ALC23DVSSp=s900-c-k-c0x00ffffff-no-rj",
+    "streamUrl": "http://160.22.105.17:8881/live/ch4/live.m3u8",
+    "priority": 7
+  },
+  {
+    "id": "news-24",
+    "name": "News 24",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNj25MbOQ7mjDII1lz87zp7IZ7a8a9rUQIw&s",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8",
+    "priority": 8
+  },
+  {
+    "id": "star-news",
+    "name": "Star News",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBjS1uewSKBgVlUmM7HhkETYNVYaUXBG5vQw&s",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8",
+    "priority": 9
+  },
+  {
+    "id": "t-sports",
+    "name": "T Sports",
+    "category": "Sports",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQEDmzU0EZ9DNjoKhhopCo-b5SxCmRQYAjPQ&s",
+    "streamUrl": "http://103.96.235.18:9090/sports1/index.m3u8",
+    "priority": 10
+  },
+  {
+    "id": "bangla-vision",
+    "name": "BanglaVision",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://www.bvnews24.com/media/common/logo-fb.png",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8",
+    "priority": 11
+  },
+  {
+    "id": "ntv",
+    "name": "NTV",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://play-lh.googleusercontent.com/zDNTB2vKjwMAluCLIqwmAeLcXBUxbMklB6oF0ooo_zwt-G354INL3dL7FP4Di7N1pTk=w600-h300-pc0xffffff-pd",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8",
+    "priority": 12
+  },
+  {
+    "id": "ekushey-tv",
+    "name": "Ekushey TV",
+    "category": "Entertainment",
+    "country": "BD",
+    "thumbnail": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d9/Ekushey_Television_Logo.svg/250px-Ekushey_Television_Logo.svg.png",
+    "streamUrl": "http://210.4.72.204/hls-live/livepkgr/_definst_/liveevent/livestream3.m3u8",
+    "priority": 13
+  },
+  {
+    "id": "channel-i",
+    "name": "Channel I",
+    "category": "Entertainment",
+    "country": "BD",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlcu876tZQE9RcjIvxANguYRf1itbJ2EcWhw&s",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8",
+    "priority": 14
+  },
+  {
+    "id": "dipto-tv",
+    "name": "Deepto TV",
+    "category": "Entertainment",
+    "country": "BD",
+    "thumbnail": "https://www.thedailystar.net/sites/default/files/styles/big_1/public/2026-02/Screenshot%202026-02-09%20at%2012.33.19%20PM.png",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8",
+    "priority": 15
+  },
+  {
+    "id": "animal-planet",
+    "name": "Animal Planet",
+    "category": "Documentary",
+    "country": "Foreign",
+    "thumbnail": "https://imagescdn.designweek.co.uk/uploads/2018/10/25115647/AnimalPlanet_Vertical_OneLineLarge_RGB-002.jpg?fit=crop&crop=faces&q=45&auto=compress,format&cs=origin&w=647&h=500",
+    "streamUrl": "https://tiger-hub.vercel.app@vodzong.mjunoon.tv:8087/streamtest/Animal-Planet-158-3/playlist.m3u8",
+    "priority": 16
+  },
+  {
+    "id": "deshe-bideshe",
+    "name": "Deshe Bideshe",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://pbs.twimg.com/profile_images/739539785304281088/zMwNO936_400x400.jpg",
+    "streamUrl": "https://dbcanada.sonarbanglatv.com/deshebideshe/dbtv/index.m3u8",
+    "priority": 17
+  },
+  {
+    "id": "btv",
+    "name": "BTV",
+    "category": "Entertainment",
+    "country": "International",
+    "thumbnail": "https://ssl.com.bd/sites/default/files/BTV%20Logo%20Gallery.png",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8",
+    "priority": 18
+  },
+  {
+    "id": "aljazeera",
+    "name": "AlJazeera",
+    "category": "News",
+    "country": "India",
+    "thumbnail": "https://s3.aynaott.com/storage/5d707a103f48d8f9f1634f1b70e2ecdf",
+    "streamUrl": "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8",
+    "priority": 19
+  },
+  {
+    "id": "dw-news",
+    "name": "DW News",
+    "category": "News",
+    "country": "International",
+    "thumbnail": "https://s3.aynaott.com/storage/0ce159bdea29fce7e3e85d12bc8a10c5",
+    "streamUrl": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8",
+    "priority": 20
+  },
+  {
+    "id": "wion",
+    "name": "Wion",
+    "category": "News",
+    "country": "International",
+    "thumbnail": "https://s3.aynaott.com/storage/671cfb22f8d0362ae01403b6e748f2e2",
+    "streamUrl": "https://d7x8z4yuq42qn.cloudfront.net/index_7.m3u8",
+    "priority": 21
+  },
+  {
+    "id": "trt-world",
+    "name": "TRT World",
+    "category": "News",
+    "country": "International",
+    "thumbnail": "https://s3.aynaott.com/storage/f63d4aad95532175f7f44be439f74111",
+    "streamUrl": "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
+    "priority": 22
+  },
+  {
+    "id": "india-today",
+    "name": "India Today",
+    "category": "News",
+    "country": "India",
+    "thumbnail": "https://s3.aynaott.com/storage/49b496bca6d7c67d53431e9238f83397",
+    "streamUrl": "https://feeds.intoday.in/hltapps/api/master.m3u8",
+    "priority": 23
+  },
+  {
+    "id": "oan",
+    "name": "OAN",
+    "category": "News",
+    "country": "International",
+    "thumbnail": "https://s3.aynaott.com/storage/73820738ff3902737f987eb34612b26d",
+    "streamUrl": "https://a-cdn.klowdtv.com/live1/oan_720p/playlist.m3u8",
+    "priority": 24
+  },
+  {
+    "id": "iran-press",
+    "name": "Iran Press",
+    "category": "News",
+    "country": "International",
+    "thumbnail": "https://s3.aynaott.com/storage/201491b7327fffb27d78f800dd9f42d2",
+    "streamUrl": "https://live.presstv.ir/hls/presstv_5_482/index.m3u8",
+    "priority": 25
+  },
+  {
+    "id": "hindi-movie-classic-24",
+    "name": "Hindi Movie Classic 24",
+    "category": "Movies",
+    "country": "India",
+    "thumbnail": "https://s3.aynaott.com/storage/3132515182ec50091b496fe515564084",
+    "streamUrl": "https://vods2.aynaott.com/hindimovies/index.m3u8",
+    "priority": 26
+  },
+  {
+    "id": "awaaz-india",
+    "name": "Awaaz India",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "https://s3.aynaott.com/storage/6f17785db48e7b5fb68b7d441ad3ad10",
+    "streamUrl": "http://awaazindia.livebox.co.in/AwaazIndaTVhls/Live.m3u8",
+    "priority": 27
+  },
+  {
+    "id": "dd-bangla",
+    "name": "DD Bangla",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://s3.aynaott.com/storage/e5117c508d18adf0a3f2475eb1fd5a9d",
+    "streamUrl": "https://d3eyhgoylams0m.cloudfront.net/v1/manifest/93ce20f0f52760bf38be911ff4c91ed02aa2fd92/ed7bd2c7-8d10-4051-b397-2f6b90f99acb/2e9e32a4-c4f7-49c3-96d6-c4e3660c7e3f/2.m3u8",
+    "priority": 28
+  },
+  {
+    "id": "enter-10-bangla",
+    "name": "Enter 10 Bangla",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "https://s3.aynaott.com/storage/2b00567c538d392c8050124f0064c4a1",
+    "streamUrl": "https://live-bangla.akamaized.net/liveabr/playlist.m3u8",
+    "priority": 29
+  },
+  {
+    "id": "euro-sports",
+    "name": "euro sports",
+    "category": "Sports",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/euro_sports_hd.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/euro-sport-hd/index.m3u8?token=f0a6f8a6f23c11f1a9e4d9d75a379a7fa8af8c63-6c111f5f6820993ddc0e0b255137b676-1771348132-1771344532",
+    "priority": 30
+  },
+  {
+    "id": "ten-cricket",
+    "name": "ten cricket",
+    "category": "Sports",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/ten_cricket.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-ten-cricket/index.m3u8?token=3589ee0d0d894d1daf5955049ac75993e2c754d0-e7039eacc4f06f69a1d64d2f2463ed57-1771348132-1771344532",
+    "priority": 31
+  },
+  {
+    "id": "sony-tv",
+    "name": "sony tv",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/38.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-entertainment-television-hd/index.m3u8?token=a69058ed00bba2b6e7543edf78f3de69203d0b40-029b76bfb00a2fd4d3c83bacd82b3e5b-1771348132-1771344532",
+    "priority": 32
+  },
+  {
+    "id": "sony-max",
+    "name": "sony max",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/sonymax.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-max/index.m3u8?token=d7a57df39ce5159dee53fb970391a6957f4da4c6-6054398a24a09ce73bf0fe28450986d3-1771348132-1771344532",
+    "priority": 33
+  },
+  {
+    "id": "sony-max-hd",
+    "name": "sony max hd",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/sonymaxhd.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-max-hd/index.m3u8?token=87c2645378acac6d70439ee45e2bfea1de27487f-dbabe9dc94de661b55e38affde6aab5b-1771348132-1771344532",
+    "priority": 34
+  },
+  {
+    "id": "sony-max-2",
+    "name": "sony max 2",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/sonymax2.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-max-2/index.m3u8?token=b79680e5fe1440525d108c93a66a9ce87adf0276-8d9096f7ede596c7c3cdd5bf1cceda00-1771348132-1771344532",
+    "priority": 35
+  },
+  {
+    "id": "zee-tv",
+    "name": "zee tv",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/40.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zee-tv-hd/index.m3u8?token=d2d4a57137a4cf72878aabd501bc53da3928e1ec-66c5e7d303934699a40cb2835ffbc318-1771348132-1771344532",
+    "priority": 36
+  },
+  {
+    "id": "zee-cinema",
+    "name": "zee cinema",
+    "category": "Movies",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/76.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zee-cinema-hd/index.m3u8?token=6fb2254c2f882c136c23ca6b3c3a0b161cbf5155-bcde5d5d12e89010ab9330a79a1ca087-1771348132-1771344532",
+    "priority": 37
+  },
+  {
+    "id": "zee-bollywood",
+    "name": "zee bollywood",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/94.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zee-bollywood/index.m3u8?token=54821f87669585cb01a930196f884543dcc95d16-026bc9875a9b31ab38f130e223e7f25c-1771348132-1771344532",
+    "priority": 38
+  },
+  {
+    "id": "zee-action",
+    "name": "zee action",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/90.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zee-action/index.m3u8?token=b8bce931cb016a167381148c37f94029a4bfa88d-1ab4e63c612b51967a4a9fcc174a377d-1771348132-1771344532",
+    "priority": 39
+  },
+  {
+    "id": "and-tv-hd",
+    "name": "and tv hd",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/74.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/tv-hd/index.m3u8?token=9f28ea1a232bae4d7563c7b4363133c04f563186-4aa4047ace7f2fd54d4caee090ea1a99-1771348132-1771344532",
+    "priority": 40
+  },
+  {
+    "id": "and-pictures",
+    "name": "and pictures",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/100.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/pictures-hd/index.m3u8?token=3c0756281bda7481b54b13b3543c4ff92fcee979-8b8b893f263758f894ff9bc8c7bb26dd-1771348132-1771344532",
+    "priority": 41
+  },
+  {
+    "id": "hum-tv",
+    "name": "hum tv",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/humtv.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/hum/index.m3u8?token=46e0c1ba2fc344fa53f3d1789fbba4da13a5be68-4a17384598ad848d8375716b2cf1c056-1771348133-1771344533",
+    "priority": 42
+  },
+  {
+    "id": "zee-anmol",
+    "name": "zee-anmol",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/zee-anmol.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zee-anmol/index.m3u8?token=32537e1ca5e3a0e2e284a6a4516b01e879d54936-810fd5e27f22595945685a5b95c7c2e5-1771348132-1771344532",
+    "priority": 43
+  },
+  {
+    "id": "hum-masala",
+    "name": "hum masala",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/hummasala.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/hum-masala/index.m3u8?token=33a9aa101f328669626385c34851a69a2803c8e2-2751c9574249b49535c8613ab80538f3-1771348132-1771344532",
+    "priority": 44
+  },
+  {
+    "id": "hum-sitarey",
+    "name": "hum sitarey",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/humsitarey.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/hum-sitaray/index.m3u8?token=2bfc5f28c59454a024fc2054f5356868ee3b3c24-8c9f928b1b2a0a05d41fca3d6b005263-1771348132-1771344532",
+    "priority": 45
+  },
+  {
+    "id": "b4u-movies",
+    "name": "b4u movies",
+    "category": "Movies",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/b4umovies.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/b4u-movies-apac/index.m3u8?token=465e407cb3d5a99860999f84f9a5889ea70ac0a1-7e5e03a0dc2fade29392de03bb9c1f26-1771348132-1771344532",
+    "priority": 46
+  },
+  {
+    "id": "sony-sab",
+    "name": "sony sab",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/36.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-sab-hd/index.m3u8?token=4252f7661115bd0161cf198fa321631fc9735165-3b709065b695edf6088bb16d1c168a36-1771348132-1771344532",
+    "priority": 47
+  },
+  {
+    "id": "discovery-hd-investigation",
+    "name": "discovery hd investigation",
+    "category": "Entertainment",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/discoveryhdInvestigation.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/investigation-discovery-hd/index.m3u8?token=359fddde9733edc07493406d305bceec7f763e15-14821b0f59c15f86ea89d687ef92415b-1771348132-1771344532",
+    "priority": 48
+  },
+  {
+    "id": "sony-bbc-earth-hd",
+    "name": "sony bbc earth hd",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/44.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-bbc-earth-hd/index.m3u8?token=cd3f0e4dfb7142c07c03dbf0ef7acf64b4bd7e87-3457ba3a18ba013b01cac255fd5a0b2e-1771348132-1771344532",
+    "priority": 49
+  },
+  {
+    "id": "sony-aath",
+    "name": "sony aath",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "http://tvassets.roarzone.info/images/33.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-aath/index.m3u8?token=0b20e82acc502101aaa60da9cc16a374bf255b91-f2f49f864827af70a67b8a19501b9a7b-1771348132-1771344532",
+    "priority": 50
+  },
+  {
+    "id": "cartoon-network-hd",
+    "name": "cartoon network hd",
+    "category": "Kids",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/cartoon-network-hd.webp",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/cartoon-network-hd/index.m3u8?token=bedc88df4bbe7eb9093893be99c12e2c87839421-fd1b0337907249f57823f7f6108c1cf0-1771348132-1771344532",
+    "priority": 51
+  },
+  {
+    "id": "pogo",
+    "name": "pogo",
+    "category": "Kids",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/pogo.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/pogo/index.m3u8?token=aaf01c16b6d04926a9c923c2251b3f29053ac6d5-dc0420ecfdddee72a5b140bd395ea01f-1771348132-1771344532",
+    "priority": 52
+  },
+  {
+    "id": "discovery-kids",
+    "name": "discovery kids",
+    "category": "Kids",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/discoverykids.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/discovery-kids/index.m3u8?token=5b2996f71c6671795e42e7b575183431970a9fc2-e6b37554cdb40e680198426ce0c118de-1771348132-1771344532",
+    "priority": 53
+  },
+  {
+    "id": "sony-yay",
+    "name": "sony yay",
+    "category": "Kids",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/sonyyay.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-yay/index.m3u8?token=73dfe7b40adf25821503821590cd5e6caab3fa0d-4a561802a18f28158e1909537e356474-1771348132-1771344532",
+    "priority": 54
+  },
+  {
+    "id": "zee-cafe-hd",
+    "name": "zee cafe hd",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/69.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zee-cafe/index.m3u8?token=bad4eb65b89d08bac08249ca8589030958d0ea70-c70afbb6065876d2f7ccd9b56feb6934-1771348132-1771344532",
+    "priority": 55
+  },
+  {
+    "id": "sony-pix",
+    "name": "sony pix",
+    "category": "Entertainment",
+    "country": "India",
+    "thumbnail": "http://tvassets.roarzone.info/images/41.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/sony-pix-hd/index.m3u8?token=417bd62173e3968f2722bef3301a18cd68a51272-5009f2bf6b975caca11001f4fd0c69b5-1771348132-1771344532",
+    "priority": 56
+  },
+  {
+    "id": "zing",
+    "name": "zing",
+    "category": "Music",
+    "country": "International",
+    "thumbnail": "http://tvassets.roarzone.info/images/93.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/zing/index.m3u8?token=52eb45c8701a3012c5772a8d2a039c18319fb0cd-4a462c521b86a7a37b94779cb60d1fd4-1771348132-1771344532",
+    "priority": 57
+  },
+  {
+    "id": "channel-s",
+    "name": "channel s",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "http://tvassets.roarzone.info/images/channel-s.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/channel-s/index.m3u8?token=3d1c868266e465e8591f56dc466600902c17c67d-38ebe1ea2a4b394969cec01ac2e887fa-1771348132-1771344532",
+    "priority": 58
+  },
+  {
+    "id": "movie-bangla-tv",
+    "name": "movie bangla tv",
+    "category": "Movies",
+    "country": "BD",
+    "thumbnail": "http://tvassets.roarzone.info/images/86.png",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/movie-bangla/index.m3u8?token=247b87e953aea7afcaf6d1b911b877fbc48d8504-cf6a7bf0db5f74caaf8d4a239bd546a6-1771348132-1771344532",
+    "priority": 59
+  },
+  {
+    "id": "ekhon",
+    "name": "ekhon",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "http://tvassets.roarzone.info/images/ekhon-tv.jpg",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/ekhon-tv/index.m3u8?token=4319262a6d331a3d2b997f17dc7d1318da09f11d-41d21765bf6f37b8289f738eecf0fcd7-1771348132-1771344532",
+    "priority": 60
+  },
+  {
+    "id": "bijoy-tv-2",
+    "name": "bijoy-tv",
+    "category": "News",
+    "country": "BD",
+    "thumbnail": "http://tvassets.roarzone.info/images/bijoy-tv.jpg",
+    "streamUrl": "https://edge2.roarzone.info:8445/roarzone/edge3/bijoy-tv/index.m3u8?token=b60d6ac3c9d79e71ffcb36416c5bb57a2952fdce-76ec9a2b7ee59faeb9afbaf13c38b416-1771348132-1771344532",
+    "priority": 61
+  }
+]

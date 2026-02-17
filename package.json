@@ -1,0 +1,15 @@
+{
+  "name": "livetv-node-admin",
+  "version": "1.0.0",
+  "description": "Live TV streaming website with Node.js backend and admin panel",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}

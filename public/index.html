@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveTV - Modern HLS Streaming</title>
+  <meta name="description" content="Modern Live TV streaming website with Node.js backend and admin management." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Manrope", "Segoe UI", "sans-serif"],
+            display: ["Space Grotesk", "Segoe UI", "sans-serif"]
+          },
+          boxShadow: {
+            panel: "0 10px 40px rgba(2, 8, 22, 0.45)"
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" />
+  <style>
+    .video-wrap .plyr__progress,
+    .video-wrap .plyr__time--current,
+    .video-wrap .plyr__time--duration {
+      display: none !important;
+    }
+
+    .video-wrap .plyr--video {
+      border-radius: 0.875rem;
+    }
+
+    .video-wrap .plyr__video-wrapper {
+      background: #010307;
+    }
+
+    .video-wrap .plyr__controls {
+      background: linear-gradient(180deg, rgba(4, 10, 21, 0.2), rgba(4, 10, 21, 0.92));
+    }
+
+    .video-wrap .plyr__control--overlaid {
+      background: rgba(18, 208, 255, 0.9);
+    }
+
+    .comments-feed::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .comments-feed::-webkit-scrollbar-thumb {
+      background: rgba(160, 196, 245, 0.35);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen overflow-x-hidden bg-slate-950 text-slate-100 font-sans">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-20 focus:rounded-lg focus:bg-cyan-50 focus:px-3 focus:py-2 focus:font-bold focus:text-slate-900" href="#mainContent">Skip to main content</a>
+
+  <div aria-hidden="true" class="pointer-events-none fixed -left-24 -top-20 h-[340px] w-[340px] rounded-full bg-cyan-400/20 blur-[70px]"></div>
+  <div aria-hidden="true" class="pointer-events-none fixed -bottom-48 -right-32 h-[420px] w-[420px] rounded-full bg-emerald-400/20 blur-[70px]"></div>
+
+  <div class="mx-auto my-0 w-[min(1380px,95vw)] py-6 max-[680px]:w-[min(1260px,96vw)] max-[680px]:pt-4">
+    <header class="mb-5 grid items-center gap-4 md:grid-cols-[auto,1fr]">
+      <div class="brand-wrap flex items-center gap-2.5">
+        <span class="h-3.5 w-3.5 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 shadow-[0_0_0_6px_rgba(18,208,255,0.12)]"></span>
+        <h1 class="font-display text-[clamp(1.2rem,1.5vw,1.7rem)] tracking-[0.4px]">LiveTV</h1>
+      </div>
+
+      <div class="search-area relative">
+        <label class="search-wrap flex h-[46px] items-center gap-2 rounded-full border border-white/20 bg-slate-800/55 px-3.5 transition focus-within:border-cyan-400/90 focus-within:shadow-[0_0_0_4px_rgba(18,208,255,0.16)]" for="searchInput">
+          <span class="sr-only">Search channels</span>
+          <svg class="h-[18px] w-[18px] text-slate-300" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 21L15.8 15.8M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <input
+            id="searchInput"
+            class="w-full border-0 bg-transparent p-0 text-[0.95rem] text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-0"
+            type="search"
+            placeholder="Search channels..."
+            autocomplete="off"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="searchPopupList"
+            aria-autocomplete="list"
+          />
+        </label>
+        <div id="searchPopup" class="search-popup hidden absolute inset-x-0 top-[calc(100%+8px)] z-30 overflow-hidden rounded-2xl border border-slate-300/20 bg-slate-950/95 shadow-2xl backdrop-blur-md" role="listbox" aria-label="Search results">
+          <div id="searchPopupList"></div>
+        </div>
+      </div>
+    </header>
+
+    <main id="mainContent" class="layout flex flex-col gap-5" tabindex="-1">
+      <section class="watch-stage grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]" aria-label="Live watch area">
+        <div>
+          <section class="player-panel min-w-0 rounded-[18px] border border-slate-300/20 bg-slate-950/80 p-[14px] shadow-panel backdrop-blur-md">
+            <div class="video-wrap relative aspect-video overflow-hidden rounded-[14px] border border-white/10 bg-[#04070e]">
+              <video id="videoPlayer" class="video-player block h-full w-full bg-[#010307]" playsinline preload="metadata" aria-label="Live stream player"></video>
+
+              <div id="bufferingOverlay" class="buffering-overlay hidden absolute inset-0 place-items-center content-center gap-2.5 bg-slate-950/70 text-sm text-slate-200" aria-live="polite">
+                <div class="h-11 w-11 animate-spin rounded-full border-4 border-white/25 border-t-cyan-400"></div>
+                <p class="m-0">Buffering stream...</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="comments-panel flex flex-col rounded-[18px] border border-white/15 bg-slate-950/90 p-[14px] shadow-panel xl:self-start" aria-labelledby="liveChatTitle">
+          <div class="comments-header flex items-center justify-between gap-2.5 border-b border-white/10 pb-2.5">
+            <h2 id="liveChatTitle" class="text-[0.95rem] font-semibold">Live Chat</h2>
+            <span id="chatViewerCount" class="chat-viewer-count rounded-full border border-emerald-300/35 bg-emerald-300/10 px-2 py-1 text-xs text-emerald-200" aria-live="polite">0 online</span>
+          </div>
+          <p id="chatChannelLabel" class="chat-channel-label mb-2.5 mt-1.5 text-xs text-slate-400">Room: Lobby</p>
+
+          <div id="commentsFeed" class="comments-feed min-h-[240px] flex-1 overflow-y-auto rounded-xl border border-white/10 bg-white/[0.02] p-2 xl:min-h-0" role="log" aria-live="polite" aria-relevant="additions text"></div>
+
+          <form id="commentForm" class="comment-form mt-2.5 grid gap-2" autocomplete="off">
+            <label for="commentName" class="sr-only">Your name</label>
+            <input id="commentName" class="h-[38px] w-full rounded-[10px] border border-white/15 bg-white/[0.05] px-[11px] text-slate-100 placeholder:text-slate-400 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" maxlength="40" placeholder="Your name" required />
+            <div class="comment-input-row grid grid-cols-[1fr_auto] gap-2 max-[680px]:grid-cols-1">
+              <label for="commentText" class="sr-only">Your comment</label>
+              <input id="commentText" class="h-[38px] w-full rounded-[10px] border border-white/15 bg-white/[0.05] px-[11px] text-slate-100 placeholder:text-slate-400 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" maxlength="280" placeholder="Write a comment..." required />
+              <button type="submit" class="min-h-[38px] min-w-[88px] select-none rounded-[10px] bg-gradient-to-r from-cyan-400 to-emerald-300 px-3 text-sm font-bold text-slate-900 transition hover:brightness-105 hover:shadow-[0_8px_20px_rgba(10,197,255,0.28)] active:translate-y-px active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60">Send</button>
+            </div>
+          </form>
+          <p id="commentStatus" class="comment-status mt-2 text-xs text-slate-400" role="status" aria-live="polite">Connecting to live chat...</p>
+        </section>
+
+        <section class="rounded-2xl border border-white/15 bg-slate-900/75 p-4 shadow-panel backdrop-blur-md xl:col-span-2" aria-live="polite">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="space-y-1">
+              <p class="m-0 text-[0.68rem] uppercase tracking-[0.12em] text-slate-400">Live Now</p>
+              <h2 id="nowPlayingName" class="font-display text-[clamp(1.05rem,1.5vw,1.55rem)]">Select a channel</h2>
+              <p id="streamSummary" class="text-sm text-slate-300">Choose a channel from the list to start watching instantly.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="streamStatus" class="inline-flex items-center whitespace-nowrap rounded-full border border-cyan-300/35 bg-cyan-300/10 px-2.5 py-1.5 text-xs text-cyan-200">Idle</span>
+              <span id="nowPlayingCategory" class="inline-flex items-center whitespace-nowrap rounded-full border border-emerald-300/35 bg-emerald-300/10 px-2.5 py-1.5 text-xs text-emerald-200">General</span>
+              <span id="viewerCountChip" class="inline-flex items-center whitespace-nowrap rounded-full border border-slate-300/35 bg-slate-300/10 px-2.5 py-1.5 text-xs text-slate-200">0 watching</span>
+            </div>
+          </div>
+
+          <div class="mt-3 flex flex-wrap items-center gap-2 border-t border-white/10 pt-3">
+            <button id="followBtn" type="button" class="rounded-lg border border-white/20 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:border-cyan-300/60 hover:bg-cyan-300/10">Follow</button>
+            <button id="shareBtn" type="button" class="rounded-lg border border-white/20 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:border-cyan-300/60 hover:bg-cyan-300/10">Share</button>
+            <button id="reportBtn" type="button" class="rounded-lg border border-white/20 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:border-rose-300/60 hover:bg-rose-300/10">Report</button>
+
+            <div class="ml-auto flex flex-wrap items-center gap-2 text-xs">
+              <span id="reactionLike" class="rounded-lg border border-white/15 bg-white/[0.03] px-2.5 py-1 text-slate-200">Like 0</span>
+              <span id="reactionFire" class="rounded-lg border border-white/15 bg-white/[0.03] px-2.5 py-1 text-slate-200">Hype 0</span>
+              <span id="reactionHeart" class="rounded-lg border border-white/15 bg-white/[0.03] px-2.5 py-1 text-slate-200">Fav 0</span>
+            </div>
+          </div>
+
+          <p id="metaNotice" class="mt-2 text-xs text-slate-400">Live stream context updates when you switch channels.</p>
+        </section>
+      </section>
+
+      <section class="channels-panel rounded-[18px] border border-slate-300/20 bg-slate-900/70 p-4 shadow-panel backdrop-blur-md" aria-labelledby="channelListTitle">
+        <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 id="channelListTitle" class="font-display text-base">Browse Live Channels</h2>
+            <p class="text-xs text-slate-400">Explore categories and switch streams in one tap.</p>
+          </div>
+          <p id="channelCountLabel" class="rounded-full border border-white/15 bg-white/[0.03] px-2.5 py-1 text-xs text-slate-300">0 channels</p>
+        </div>
+
+        <div class="filter-row mb-3 flex flex-wrap gap-2">
+          <button class="category-btn active rounded-full px-3 py-2 text-sm" data-category="All">All</button>
+        </div>
+        <div id="channelGrid" class="channel-grid grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-2.5" role="list" aria-label="Live TV channels"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.min.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/assets/js/comments.js"></script>
+</body>
+</html>

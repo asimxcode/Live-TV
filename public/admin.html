@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveTV Control Room</title>
+  <meta name="description" content="Advanced admin panel to manage IPTV channels and priority order." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Manrope", "Segoe UI", "sans-serif"],
+            display: ["Space Grotesk", "Segoe UI", "sans-serif"]
+          },
+          boxShadow: {
+            panel: "0 16px 46px rgba(3, 8, 20, 0.48)"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-slate-950 font-sans text-slate-100">
+  <div aria-hidden="true" class="pointer-events-none fixed left-[6%] top-[4%] h-80 w-80 rounded-full bg-blue-500/20 blur-3xl"></div>
+  <div aria-hidden="true" class="pointer-events-none fixed bottom-[8%] right-[6%] h-80 w-80 rounded-full bg-emerald-400/15 blur-3xl"></div>
+
+  <div class="admin-shell mx-auto my-0 w-[min(1260px,95vw)] py-6">
+    <header class="admin-topbar mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p class="eyebrow mb-1 text-xs uppercase tracking-[0.08em] text-slate-400">Private Area</p>
+        <h1 class="font-display text-[clamp(1.2rem,2vw,1.75rem)]">LiveTV Control Room</h1>
+      </div>
+      <div class="topbar-actions flex flex-wrap gap-2">
+        <a class="inline-flex h-10 items-center justify-center rounded-lg border border-white/25 bg-white/10 px-4 text-sm font-semibold text-slate-100 transition hover:bg-white/15" href="/">Open Player</a>
+        <button id="logoutBtn" class="hidden h-10 rounded-lg bg-gradient-to-r from-rose-500 to-pink-400 px-4 text-sm font-semibold text-white transition hover:brightness-105" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section id="loginSection" class="panel login-panel w-full max-w-[520px] rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+      <h2 class="mb-2 font-display text-xl">Admin Login</h2>
+      <p class="mb-4 text-sm text-slate-400">This page is hidden from public navigation. Authenticate to continue.</p>
+      <form id="loginForm" class="grid gap-3">
+        <label class="grid gap-1.5 text-sm text-slate-400">
+          Username
+          <input id="username" name="username" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" autocomplete="username" required />
+        </label>
+        <label class="grid gap-1.5 text-sm text-slate-400">
+          Password
+          <input id="password" name="password" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="password" autocomplete="current-password" required />
+        </label>
+        <button class="h-10 rounded-[10px] bg-gradient-to-r from-cyan-500 to-sky-300 text-sm font-bold text-slate-900 transition hover:brightness-105" type="submit">Login</button>
+      </form>
+    </section>
+
+    <section id="adminSection" class="hidden">
+      <div class="stats-grid mb-3 grid gap-3 max-[1080px]:grid-cols-2 md:grid-cols-4">
+        <article class="panel stat-card rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+          <p class="text-xs text-slate-400">Total Channels</p>
+          <h3 id="statTotalChannels" class="mt-2 text-2xl font-semibold">0</h3>
+        </article>
+        <article class="panel stat-card rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+          <p class="text-xs text-slate-400">Categories</p>
+          <h3 id="statCategories" class="mt-2 text-2xl font-semibold">0</h3>
+        </article>
+        <article class="panel stat-card rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+          <p class="text-xs text-slate-400">Countries</p>
+          <h3 id="statCountries" class="mt-2 text-2xl font-semibold">0</h3>
+        </article>
+        <article class="panel stat-card rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+          <p class="text-xs text-slate-400">Admin Path</p>
+          <h3 id="statAdminPath" class="mt-2 break-all text-base font-semibold">Hidden</h3>
+        </article>
+      </div>
+
+      <div class="admin-grid grid gap-3 max-[1080px]:grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
+        <div class="panel rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+          <h2 id="formTitle" class="mb-3 font-display text-xl">Add Channel</h2>
+          <form id="channelForm" class="channel-form grid gap-3">
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Channel ID (optional)
+              <input id="channelId" name="id" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" placeholder="auto-generated from name" />
+            </label>
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Name
+              <input id="channelName" name="name" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" required />
+            </label>
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Category
+              <input id="channelCategory" name="category" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" placeholder="News, Sports, Entertainment..." required />
+            </label>
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Country
+              <input id="channelCountry" name="country" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="text" placeholder="US, BD, UK..." />
+            </label>
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Priority (1 = top)
+              <input id="channelPriority" name="priority" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="number" min="1" placeholder="auto at bottom" />
+            </label>
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Thumbnail URL
+              <input id="channelThumbnail" name="thumbnail" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="url" placeholder="https://..." required />
+            </label>
+            <label class="grid gap-1.5 text-sm text-slate-400">
+              Stream URL (.m3u8)
+              <input id="channelStreamUrl" name="streamUrl" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="url" placeholder="https://...m3u8" required />
+            </label>
+
+            <div class="form-actions mt-1 flex flex-wrap gap-2">
+              <button id="saveBtn" class="h-10 rounded-[10px] bg-gradient-to-r from-cyan-500 to-sky-300 px-4 text-sm font-bold text-slate-900 transition hover:brightness-105" type="submit">Save Channel</button>
+              <button id="cancelEditBtn" class="h-10 rounded-[10px] border border-white/25 bg-white/10 px-4 text-sm font-semibold text-slate-100 transition hover:bg-white/15" type="button">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel rounded-2xl border border-slate-300/20 bg-slate-900/80 p-4 shadow-panel backdrop-blur-md">
+          <div class="panel-header mb-3 flex flex-wrap items-center justify-between gap-2.5">
+            <h2 class="font-display text-xl">Channel Manager</h2>
+            <div class="header-actions flex flex-wrap gap-2">
+              <button id="refreshBtn" class="h-10 rounded-[10px] border border-white/25 bg-white/10 px-4 text-sm font-semibold text-slate-100 transition hover:bg-white/15" type="button">Refresh</button>
+              <button id="exportBtn" class="h-10 rounded-[10px] border border-white/25 bg-white/10 px-4 text-sm font-semibold text-slate-100 transition hover:bg-white/15" type="button">Export JSON</button>
+            </div>
+          </div>
+
+          <div class="filters mb-3 grid gap-2 max-[720px]:grid-cols-1 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+            <label class="inline-field grid gap-1.5 text-sm text-slate-400">
+              Search
+              <input id="filterSearch" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15" type="search" placeholder="Find by name, category, country, id..." />
+            </label>
+            <label class="inline-field grid gap-1.5 text-sm text-slate-400">
+              Category
+              <select id="filterCategory" class="h-[42px] rounded-[10px] border border-white/20 bg-slate-900/80 px-3 text-slate-100 outline-none transition focus:border-cyan-400/90 focus:ring-4 focus:ring-cyan-400/15">
+                <option value="All">All</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="table-wrap overflow-x-auto">
+            <table class="min-w-[920px] w-full border-collapse">
+              <thead>
+                <tr>
+                  <th class="border-b border-white/10 px-2 py-2.5 text-left text-xs font-bold text-slate-300">Priority</th>
+                  <th class="border-b border-white/10 px-2 py-2.5 text-left text-xs font-bold text-slate-300">Name</th>
+                  <th class="border-b border-white/10 px-2 py-2.5 text-left text-xs font-bold text-slate-300">Category</th>
+                  <th class="border-b border-white/10 px-2 py-2.5 text-left text-xs font-bold text-slate-300">Country</th>
+                  <th class="border-b border-white/10 px-2 py-2.5 text-left text-xs font-bold text-slate-300">ID</th>
+                  <th class="border-b border-white/10 px-2 py-2.5 text-left text-xs font-bold text-slate-300">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="channelTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p id="statusMessage" class="status-message mt-2.5 min-h-5 text-sm text-slate-400"></p>
+  </div>
+
+  <script src="/assets/js/admin.js"></script>
+</body>
+</html>
