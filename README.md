@@ -10,6 +10,8 @@ Modern Live TV streaming website with:
 ## Features
 
 - HLS `.m3u8` playback on modern browsers
+- Server-side HLS proxy (public client never receives raw `streamUrl`)
+- HLS proxy token reuse + automatic stale segment cleanup
 - Safari native HLS fallback
 - Responsive dark UI
 - Search + category filtering on player
@@ -103,6 +105,9 @@ Note:
 ```
 
 Lower `priority` appears first in both player and admin list.
+
+Public `/api/channels` response exposes `playbackUrl` only.
+The original `streamUrl` is returned only in authenticated admin APIs.
 
 ## Deployment
 

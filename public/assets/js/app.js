@@ -412,10 +412,18 @@
     video.removeAttribute("src");
     video.load();
     syncChatHeightToPlayer();
+    const streamUrl = String(channel.playbackUrl || "").trim();
+
+    if (!streamUrl) {
+      setBufferingState(false);
+      setStatus("Stream unavailable");
+      setNotice("This channel is missing a playable stream URL.", "error");
+      return;
+    }
 
     if (window.Hls && Hls.isSupported()) {
       hls = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 90 });
-      hls.loadSource(channel.streamUrl);
+      hls.loadSource(streamUrl);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         startFromBeginning();
@@ -427,7 +435,7 @@
     }
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = channel.streamUrl;
+      video.src = streamUrl;
       video.addEventListener(
         "loadedmetadata",
         () => {

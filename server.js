@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const http = require("http");
 const fs = require("fs/promises");
 const path = require("path");
+const { Readable } = require("stream");
 const express = require("express");
 const { Server: SocketIOServer } = require("socket.io");
 
@@ -29,11 +30,20 @@ const COMMENT_RATE_LIMIT_MS = 900;
 const COMMENT_NAME_MAX_LENGTH = 40;
 const COMMENT_MESSAGE_MAX_LENGTH = 280;
 const DEFAULT_CHAT_ROOM = "lobby";
+const HLS_PROXY_REQUEST_TIMEOUT_MS = 1000 * 20;
+const HLS_PROXY_SEGMENT_TTL_MS = 1000 * 60 * 2;
+const HLS_PROXY_PLAYLIST_TTL_MS = 1000 * 60 * 4;
+const HLS_PROXY_KEY_TTL_MS = 1000 * 60 * 10;
+const HLS_PROXY_OTHER_TTL_MS = 1000 * 60 * 5;
 
 const sessions = new Map();
 const liveCommentsByRoom = new Map();
 const socketRoomMap = new Map();
 const socketLastCommentAt = new Map();
+const hlsProxyTokens = new Map();
+const hlsProxyUrlIndex = new Map();
+const hlsChannelTokens = new Map();
+const hlsChannelSegmentWindows = new Map();
 
 app.use(express.json({ limit: "1mb" }));
 
@@ -106,6 +116,16 @@ function requireAdmin(req, res, next) {
 
 function normalizeString(value) {
   return String(value || "").trim();
+}
+
+function getRequestBaseUrl(req) {
+  const forwardedProto = normalizeString(req.headers["x-forwarded-proto"]).split(",")[0];
+  const protocol = normalizeString(forwardedProto) || req.protocol || "http";
+  const host = normalizeString(req.get("host"));
+  if (!host) {
+    return `${protocol}://localhost:${PORT}`;
+  }
+  return `${protocol}://${host}`;
 }
 
 function normalizeChatRoom(value) {
@@ -303,6 +323,360 @@ function insertByPriority(channels, channel, priority) {
   return ordered.map((item, index) => ({ ...item, priority: index + 1 }));
 }
 
+function buildPlaybackUrl(channelId) {
+  return `/api/hls/${encodeURIComponent(channelId)}/master.m3u8`;
+}
+
+function toPublicChannel(channel) {
+  const { streamUrl: _streamUrl, ...safeChannel } = channel;
+  return {
+    ...safeChannel,
+    playbackUrl: buildPlaybackUrl(channel.id)
+  };
+}
+
+function getHlsTokenTtlMs(resourceType) {
+  if (resourceType === "segment") {
+    return HLS_PROXY_SEGMENT_TTL_MS;
+  }
+  if (resourceType === "playlist") {
+    return HLS_PROXY_PLAYLIST_TTL_MS;
+  }
+  if (resourceType === "key") {
+    return HLS_PROXY_KEY_TTL_MS;
+  }
+  return HLS_PROXY_OTHER_TTL_MS;
+}
+
+function detectHlsResourceType(targetUrl, hint = "") {
+  const normalizedHint = normalizeString(hint).toLowerCase();
+  if (normalizedHint === "segment" || normalizedHint === "playlist" || normalizedHint === "key") {
+    return normalizedHint;
+  }
+
+  try {
+    const pathname = new URL(targetUrl).pathname.toLowerCase();
+    if (pathname.endsWith(".m3u8") || pathname.endsWith(".m3u")) {
+      return "playlist";
+    }
+    if (pathname.endsWith(".key")) {
+      return "key";
+    }
+    if (
+      pathname.endsWith(".ts") ||
+      pathname.endsWith(".m4s") ||
+      pathname.endsWith(".mp4") ||
+      pathname.endsWith(".aac") ||
+      pathname.endsWith(".vtt") ||
+      pathname.endsWith(".webvtt")
+    ) {
+      return "segment";
+    }
+  } catch (_error) {
+    return "other";
+  }
+
+  return "other";
+}
+
+function buildHlsTokenCacheKey(channelId, targetUrl, resourceType) {
+  return `${channelId}|${resourceType}|${targetUrl}`;
+}
+
+function addChannelToken(channelId, token) {
+  if (!hlsChannelTokens.has(channelId)) {
+    hlsChannelTokens.set(channelId, new Set());
+  }
+  hlsChannelTokens.get(channelId).add(token);
+}
+
+function removeChannelToken(channelId, token) {
+  const tokenSet = hlsChannelTokens.get(channelId);
+  if (!tokenSet) {
+    return;
+  }
+  tokenSet.delete(token);
+  if (!tokenSet.size) {
+    hlsChannelTokens.delete(channelId);
+  }
+}
+
+function deleteHlsProxyToken(token) {
+  const entry = hlsProxyTokens.get(token);
+  if (!entry) {
+    return;
+  }
+  hlsProxyTokens.delete(token);
+  removeChannelToken(entry.channelId, token);
+  if (entry.cacheKey && hlsProxyUrlIndex.get(entry.cacheKey) === token) {
+    hlsProxyUrlIndex.delete(entry.cacheKey);
+  }
+}
+
+function createHlsProxyToken(channelId, targetUrl, resourceHint = "") {
+  const resourceType = detectHlsResourceType(targetUrl, resourceHint);
+  const cacheKey = buildHlsTokenCacheKey(channelId, targetUrl, resourceType);
+  const ttl = getHlsTokenTtlMs(resourceType);
+  const now = Date.now();
+  const existingToken = hlsProxyUrlIndex.get(cacheKey);
+
+  if (existingToken) {
+    const existingEntry = hlsProxyTokens.get(existingToken);
+    if (existingEntry && existingEntry.expiresAt > now) {
+      existingEntry.expiresAt = now + ttl;
+      return {
+        token: existingToken,
+        cacheKey,
+        resourceType
+      };
+    }
+    deleteHlsProxyToken(existingToken);
+  }
+
+  const token = crypto.randomBytes(18).toString("hex");
+  hlsProxyTokens.set(token, {
+    channelId,
+    targetUrl,
+    cacheKey,
+    resourceType,
+    expiresAt: now + ttl
+  });
+  hlsProxyUrlIndex.set(cacheKey, token);
+  addChannelToken(channelId, token);
+
+  return {
+    token,
+    cacheKey,
+    resourceType
+  };
+}
+
+function getHlsProxyTarget(channelId, token) {
+  const entry = hlsProxyTokens.get(token);
+  if (!entry) {
+    return "";
+  }
+  if (entry.channelId !== channelId) {
+    return "";
+  }
+  if (entry.expiresAt <= Date.now()) {
+    deleteHlsProxyToken(token);
+    return "";
+  }
+  entry.expiresAt = Date.now() + getHlsTokenTtlMs(entry.resourceType);
+  return entry.targetUrl;
+}
+
+function resolveHlsUri(baseUrl, rawUri) {
+  const candidate = normalizeString(rawUri);
+  if (!candidate) {
+    return "";
+  }
+
+  try {
+    const resolved = new URL(candidate, baseUrl);
+    if (resolved.protocol !== "http:" && resolved.protocol !== "https:") {
+      return "";
+    }
+    return resolved.toString();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function createProxyAssetPath(channelId, targetUrl, resourceHint = "", currentSegmentKeys = null) {
+  const tokenMeta = createHlsProxyToken(channelId, targetUrl, resourceHint);
+  if (currentSegmentKeys && tokenMeta.resourceType === "segment") {
+    currentSegmentKeys.add(tokenMeta.cacheKey);
+  }
+  return `/api/hls/${encodeURIComponent(channelId)}/asset/${tokenMeta.token}`;
+}
+
+function rewriteHlsTagUris(line, baseUrl, channelId, currentSegmentKeys = null) {
+  const normalized = line.trim().toUpperCase();
+  const hint = normalized.startsWith("#EXT-X-KEY") ? "key" : normalized.startsWith("#EXT-X-MAP") ? "segment" : "";
+  return line
+    .replace(/URI="([^"]+)"/g, (match, uri) => {
+      const resolved = resolveHlsUri(baseUrl, uri);
+      if (!resolved) {
+        return match;
+      }
+      return `URI="${createProxyAssetPath(channelId, resolved, hint, currentSegmentKeys)}"`;
+    })
+    .replace(/URI='([^']+)'/g, (match, uri) => {
+      const resolved = resolveHlsUri(baseUrl, uri);
+      if (!resolved) {
+        return match;
+      }
+      return `URI='${createProxyAssetPath(channelId, resolved, hint, currentSegmentKeys)}'`;
+    });
+}
+
+function isLikelyMediaPlaylist(playlistText) {
+  const normalized = String(playlistText || "").toUpperCase();
+  return normalized.includes("#EXTINF:") || normalized.includes("#EXT-X-MEDIA-SEQUENCE");
+}
+
+function pruneChannelOldSegments(channelId, currentSegmentKeys) {
+  const existing = hlsChannelSegmentWindows.get(channelId) || {
+    current: new Set(),
+    previous: new Set()
+  };
+  const staleKeys = [];
+
+  for (const cacheKey of existing.previous) {
+    if (!existing.current.has(cacheKey) && !currentSegmentKeys.has(cacheKey)) {
+      staleKeys.push(cacheKey);
+    }
+  }
+
+  for (const cacheKey of staleKeys) {
+    const token = hlsProxyUrlIndex.get(cacheKey);
+    if (token) {
+      deleteHlsProxyToken(token);
+    }
+  }
+
+  hlsChannelSegmentWindows.set(channelId, {
+    previous: new Set(existing.current),
+    current: new Set(currentSegmentKeys)
+  });
+}
+
+function rewriteHlsPlaylist(playlistText, baseUrl, channelId) {
+  const isMediaPlaylist = isLikelyMediaPlaylist(playlistText);
+  const currentSegmentKeys = isMediaPlaylist ? new Set() : null;
+
+  const rewritten = String(playlistText || "")
+    .split(/\r?\n/)
+    .map((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        return line;
+      }
+      if (trimmed.startsWith("#")) {
+        return rewriteHlsTagUris(line, baseUrl, channelId, currentSegmentKeys);
+      }
+      const resolved = resolveHlsUri(baseUrl, trimmed);
+      if (!resolved) {
+        return line;
+      }
+      const hint = detectHlsResourceType(resolved);
+      return createProxyAssetPath(channelId, resolved, hint, currentSegmentKeys);
+    })
+    .join("\n");
+
+  if (isMediaPlaylist && currentSegmentKeys) {
+    pruneChannelOldSegments(channelId, currentSegmentKeys);
+  }
+
+  return rewritten;
+}
+
+function isHlsPlaylistResponse(contentType, targetUrl) {
+  const normalizedType = normalizeString(contentType).toLowerCase();
+  if (
+    normalizedType.includes("application/vnd.apple.mpegurl") ||
+    normalizedType.includes("application/x-mpegurl") ||
+    normalizedType.includes("audio/mpegurl")
+  ) {
+    return true;
+  }
+
+  try {
+    const pathname = new URL(targetUrl).pathname.toLowerCase();
+    return pathname.endsWith(".m3u8") || pathname.endsWith(".m3u");
+  } catch (_error) {
+    return false;
+  }
+}
+
+async function proxyHlsRequest(req, res, channelId, targetUrl) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), HLS_PROXY_REQUEST_TIMEOUT_MS);
+  const requestHeaders = {};
+  const range = normalizeString(req.headers.range);
+  const userAgent = normalizeString(req.headers["user-agent"]);
+
+  if (range) {
+    requestHeaders.Range = range;
+  }
+  if (userAgent) {
+    requestHeaders["User-Agent"] = userAgent;
+  }
+
+  let upstreamResponse;
+  try {
+    upstreamResponse = await fetch(targetUrl, {
+      method: "GET",
+      headers: requestHeaders,
+      redirect: "follow",
+      signal: controller.signal
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      res.status(504).send("Upstream stream request timed out.");
+      return;
+    }
+    res.status(502).send("Unable to fetch upstream stream.");
+    return;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  const finalUrl = normalizeString(upstreamResponse.url) || targetUrl;
+  const contentType = normalizeString(upstreamResponse.headers.get("content-type"));
+  const isPlaylist = isHlsPlaylistResponse(contentType, finalUrl);
+
+  res.status(upstreamResponse.status);
+
+  for (const headerName of ["cache-control", "etag", "last-modified", "accept-ranges", "content-range"]) {
+    const value = upstreamResponse.headers.get(headerName);
+    if (value) {
+      res.setHeader(headerName, value);
+    }
+  }
+
+  if (!upstreamResponse.ok) {
+    const errorText = await upstreamResponse.text().catch(() => "");
+    res.type("text/plain");
+    res.send(errorText || "Upstream stream request failed.");
+    return;
+  }
+
+  if (isPlaylist) {
+    const playlistText = await upstreamResponse.text();
+    const rewritten = rewriteHlsPlaylist(playlistText, finalUrl, channelId);
+    res.type("application/vnd.apple.mpegurl");
+    res.setHeader("Cache-Control", "no-store, max-age=0");
+    res.send(rewritten);
+    return;
+  }
+
+  if (contentType) {
+    res.setHeader("content-type", contentType);
+  }
+  const contentLength = upstreamResponse.headers.get("content-length");
+  if (contentLength) {
+    res.setHeader("content-length", contentLength);
+  }
+
+  if (!upstreamResponse.body) {
+    res.end();
+    return;
+  }
+
+  const stream = Readable.fromWeb(upstreamResponse.body);
+  stream.on("error", () => {
+    if (!res.headersSent) {
+      res.status(502).end();
+      return;
+    }
+    res.end();
+  });
+  stream.pipe(res);
+}
+
 app.post("/api/admin/login", (req, res) => {
   const username = normalizeString(req.body?.username);
   const password = normalizeString(req.body?.password);
@@ -332,12 +706,38 @@ app.get("/api/admin/me", requireAdmin, (_req, res) => {
 
 app.get("/api/channels", async (_req, res) => {
   const channels = await readChannels();
-  return res.json(sortChannels(channels));
+  return res.json(sortChannels(channels).map(toPublicChannel));
 });
 
 app.get("/api/admin/channels", requireAdmin, async (_req, res) => {
   const channels = await readChannels();
   return res.json(sortChannels(channels));
+});
+
+app.get("/api/hls/:id/master.m3u8", async (req, res) => {
+  const channelId = normalizeString(req.params.id);
+  const channels = await readChannels();
+  const channel = channels.find((item) => item.id === channelId);
+  if (!channel) {
+    return res.status(404).send("Channel not found.");
+  }
+
+  await proxyHlsRequest(req, res, channel.id, channel.streamUrl);
+});
+
+app.get("/api/hls/:id/asset/:token", async (req, res) => {
+  const channelId = normalizeString(req.params.id);
+  const token = normalizeString(req.params.token);
+  if (!channelId || !token) {
+    return res.status(400).send("Invalid stream asset request.");
+  }
+
+  const targetUrl = getHlsProxyTarget(channelId, token);
+  if (!targetUrl) {
+    return res.status(404).send("Stream asset expired or unavailable.");
+  }
+
+  await proxyHlsRequest(req, res, channelId, targetUrl);
 });
 
 app.post("/api/channels", requireAdmin, async (req, res) => {
@@ -440,6 +840,41 @@ app.use((req, res, next) => {
   return next();
 });
 
+app.get("/robots.txt", (req, res) => {
+  const baseUrl = getRequestBaseUrl(req);
+  const lines = [
+    "User-agent: *",
+    "Allow: /",
+    `Disallow: ${ADMIN_PATH}`,
+    `Disallow: ${ADMIN_PATH}/`,
+    "Disallow: /admin",
+    "Disallow: /admin/",
+    "Disallow: /admin.html",
+    "Disallow: /api/",
+    `Sitemap: ${baseUrl}/sitemap.xml`
+  ];
+
+  res.type("text/plain");
+  res.send(`${lines.join("\n")}\n`);
+});
+
+app.get("/sitemap.xml", (req, res) => {
+  const baseUrl = getRequestBaseUrl(req);
+  const today = new Date().toISOString().slice(0, 10);
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+
+  res.type("application/xml");
+  res.send(xml);
+});
+
 app.use(express.static(PUBLIC_DIR, { index: false }));
 
 app.get("/", (_req, res) => {
@@ -447,6 +882,7 @@ app.get("/", (_req, res) => {
 });
 
 app.get([ADMIN_PATH, `${ADMIN_PATH}/`], (_req, res) => {
+  res.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   res.sendFile(path.join(PUBLIC_DIR, "admin.html"));
 });
 
@@ -558,6 +994,25 @@ setInterval(() => {
     }
   }
 }, 15 * 60 * 1000);
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [token, meta] of hlsProxyTokens.entries()) {
+    if (meta.expiresAt <= now) {
+      deleteHlsProxyToken(token);
+    }
+  }
+
+  for (const [channelId, windowState] of hlsChannelSegmentWindows.entries()) {
+    const current = new Set([...windowState.current].filter((cacheKey) => hlsProxyUrlIndex.has(cacheKey)));
+    const previous = new Set([...windowState.previous].filter((cacheKey) => hlsProxyUrlIndex.has(cacheKey)));
+    if (!current.size && !previous.size) {
+      hlsChannelSegmentWindows.delete(channelId);
+      continue;
+    }
+    hlsChannelSegmentWindows.set(channelId, { current, previous });
+  }
+}, 60 * 1000);
 
 server.listen(PORT, () => {
   console.log(`LiveTV server running on http://localhost:${PORT}`);
