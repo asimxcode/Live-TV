@@ -4,7 +4,7 @@ Modern Live TV streaming website with:
 - Public player (`/`)
 - Hidden admin panel (custom secret path)
 - HLS playback via HLS.js
-- Tailwind CSS UI (CDN-based)
+- Bootstrap 5 minimal UI (CDN-based)
 - Channel data persisted in `data/channels.json`
 
 ## Features
@@ -19,6 +19,7 @@ Modern Live TV streaming website with:
 - Auto-play selected channel
 - Buffering spinner overlay
 - Realtime live comments (name + message) with per-channel chat rooms
+- Dynamic live viewer count tied to active channel room presence
 - Hidden admin URL (not shown on public page)
 - Admin login/logout
 - Advanced admin tools:

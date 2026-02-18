@@ -17,10 +17,10 @@
   const defaultRoom = "lobby";
   const SEND_ACK_TIMEOUT_MS = 4500;
   const defaultSubmitLabel = submitButton?.textContent?.trim() || "Send";
-  const statusBaseClasses = ["comment-status", "mt-2", "text-xs", "text-slate-400"];
+  const statusBaseClasses = ["comment-status", "mt-2", "small", "text-secondary"];
   const statusTypeClasses = {
-    success: ["text-emerald-300"],
-    error: ["text-rose-300"]
+    success: ["text-success"],
+    error: ["text-danger"]
   };
 
   let activeRoom = defaultRoom;
@@ -51,7 +51,7 @@
     commentStatus.textContent = message;
     commentStatus.className = statusBaseClasses.join(" ");
     if (type && statusTypeClasses[type]) {
-      commentStatus.classList.remove("text-slate-400");
+      commentStatus.classList.remove("text-secondary");
       commentStatus.classList.add(...statusTypeClasses[type]);
     }
   }
@@ -69,18 +69,18 @@
   }
 
   function renderEmptyState(message = "No comments yet. Be the first to comment.") {
-    commentsFeed.innerHTML = `<div class="comment-empty px-3 py-4 text-center text-xs text-slate-400">${escapeHtml(message)}</div>`;
+    commentsFeed.innerHTML = `<div class="comment-empty px-3 py-4 text-center small text-secondary">${escapeHtml(message)}</div>`;
   }
 
   function createCommentNode(comment) {
     const wrapper = document.createElement("article");
-    wrapper.className = "comment-item border-b border-white/10 px-1 py-2 last:border-b-0";
+    wrapper.className = "comment-item px-1 py-2";
     wrapper.innerHTML = `
-      <div class="comment-head mb-1 flex items-center justify-between gap-2">
-        <span class="comment-name text-sm font-bold text-slate-100">${escapeHtml(comment.name || "Guest")}</span>
-        <span class="comment-time text-xs text-slate-400">${escapeHtml(formatTime(comment.createdAt))}</span>
+      <div class="comment-head mb-1 d-flex align-items-center justify-content-between gap-2">
+        <span class="comment-name fw-semibold text-light">${escapeHtml(comment.name || "Guest")}</span>
+        <span class="comment-time small text-secondary">${escapeHtml(formatTime(comment.createdAt))}</span>
       </div>
-      <p class="comment-message m-0 break-words text-sm leading-snug text-slate-200">${escapeHtml(comment.message || "")}</p>
+      <p class="comment-message m-0 small text-light">${escapeHtml(comment.message || "")}</p>
     `;
     return wrapper;
   }
@@ -139,6 +139,11 @@
     activeChannelName = String(channelName || "Lobby").trim() || "Lobby";
     updateRoomLabel();
     renderEmptyState("Loading comments...");
+    window.dispatchEvent(
+      new CustomEvent("livetv:viewer-count", {
+        detail: { roomId: activeRoom, count: 0 }
+      })
+    );
 
     if (socket.connected) {
       socket.emit("comment:join", { roomId: activeRoom });
@@ -182,6 +187,11 @@
     const count = Number.parseInt(payload?.count, 10);
     const safeCount = Number.isFinite(count) && count > 0 ? count : 0;
     chatViewerCount.textContent = `${safeCount} online`;
+    window.dispatchEvent(
+      new CustomEvent("livetv:viewer-count", {
+        detail: { roomId, count: safeCount }
+      })
+    );
   });
 
   commentNameInput.addEventListener("change", () => {

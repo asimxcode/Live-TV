@@ -4,111 +4,287 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LiveTV Bangladesh - Watch Bangla Live TV Channels Online</title>
-  <meta name="description" content="Watch Bangladesh live TV channels online, including Bangla news, sports, entertainment, and Islamic programs. Fast, free live streaming for Bangladeshi viewers worldwide." />
-  <meta name="keywords" content="bangladesh live tv,bangla live tv,bd live tv,bangla tv channels,watch bd tv online,bangla news live,bangladesh sports live,বাংলা লাইভ টিভি" />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <meta name="author" content="LiveTV Bangladesh" />
-  <meta name="theme-color" content="#020617" />
-  <meta http-equiv="content-language" content="en-BD, bn-BD" />
-  <meta name="geo.region" content="BD" />
-  <meta name="geo.placename" content="Bangladesh" />
-  <link rel="canonical" href="/" />
-  <link rel="alternate" hreflang="en-BD" href="/" />
-  <link rel="alternate" hreflang="bn-BD" href="/" />
-  <link rel="alternate" hreflang="x-default" href="/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_BD" />
-  <meta property="og:site_name" content="LiveTV Bangladesh" />
-  <meta property="og:title" content="LiveTV Bangladesh - Watch Bangla Live TV Channels Online" />
-  <meta property="og:description" content="Watch Bangladesh live TV channels online with Bangla news, sports, entertainment, and more." />
-  <meta property="og:url" content="/" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="LiveTV Bangladesh - Watch Bangla Live TV Channels Online" />
-  <meta name="twitter:description" content="Live streaming of Bangla TV channels for viewers in Bangladesh and abroad." />
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "LiveTV Bangladesh",
-      "alternateName": "Bangla Live TV",
-      "description": "Watch Bangladesh live TV channels online, including Bangla news, sports, entertainment, and Islamic programs.",
-      "inLanguage": ["en-BD", "bn-BD"],
-      "areaServed": "Bangladesh"
-    }
-  </script>
+  <meta name="description" content="Watch Bangladesh live TV channels online, including Bangla news, sports, and entertainment." />
+  <meta name="theme-color" content="#0b1220" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Manrope", "Segoe UI", "sans-serif"],
-            display: ["Space Grotesk", "Segoe UI", "sans-serif"]
-          },
-          boxShadow: {
-            panel: "0 10px 40px rgba(2, 8, 22, 0.45)"
-          }
-        }
-      }
-    };
-  </script>
-</head>
-<body class="min-h-screen overflow-x-hidden bg-slate-950 font-sans text-slate-100">
-  <div aria-hidden="true" class="pointer-events-none fixed -left-24 -top-20 h-[340px] w-[340px] rounded-full bg-cyan-400/20 blur-[70px]"></div>
-  <div aria-hidden="true" class="pointer-events-none fixed -bottom-48 -right-32 h-[420px] w-[420px] rounded-full bg-emerald-400/20 blur-[70px]"></div>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+    }
 
-  <div class="mx-auto my-0 w-[min(1250px,94vw)] py-6 max-[680px]:w-[min(1260px,96vw)] max-[680px]:pt-4">
-    <header class="mb-5 grid items-center gap-4 md:grid-cols-[auto,1fr]">
-      <div class="flex items-center gap-2.5">
-        <span class="h-3.5 w-3.5 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 shadow-[0_0_0_6px_rgba(18,208,255,0.12)]"></span>
-        <h1 class="font-display text-[clamp(1.2rem,1.5vw,1.7rem)] tracking-[0.4px]">LiveTV</h1>
+    body {
+      font-family: Manrope, "Segoe UI", sans-serif;
+      background: #0b1220;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    .app-shell {
+      max-width: 1320px;
+    }
+
+    .surface {
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #243247;
+      border-radius: 16px;
+      box-shadow: 0 14px 35px rgba(3, 7, 18, 0.62);
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22d3ee, #2563eb);
+      box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.16);
+    }
+
+    .search-control {
+      background: #111c32;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+    }
+
+    .search-control:focus {
+      background: #111c32;
+      color: #e2e8f0;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 0.2rem rgba(56, 189, 248, 0.2);
+    }
+
+    .search-control::placeholder {
+      color: #94a3b8;
+    }
+
+    .video-wrap {
+      background: #020617;
+      border: 1px solid rgba(100, 116, 139, 0.4);
+    }
+
+    .video-element {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .search-popup {
+      z-index: 1050;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      overflow: hidden;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .search-popup-item {
+      border: 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      background: transparent;
+      color: #e2e8f0;
+      transition: background-color 0.15s ease;
+    }
+
+    .search-popup-item:hover,
+    .search-popup-item.active {
+      background: rgba(59, 130, 246, 0.18);
+    }
+
+    .comments-feed {
+      min-height: 240px;
+      max-height: 430px;
+      overflow-y: auto;
+      background: #020617;
+      border: 1px solid #243247;
+      border-radius: 12px;
+    }
+
+    .comment-field {
+      background: #111827;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+    }
+
+    .comment-field:focus {
+      background: #111827;
+      color: #e2e8f0;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 0.16rem rgba(56, 189, 248, 0.3);
+    }
+
+    .comment-item {
+      border-bottom: 1px solid #99999940;
+    }
+
+    .channel-card {
+      background: #0f172a;
+      border-color: rgba(148, 163, 184, 0.32);
+      content-visibility: auto;
+      contain-intrinsic-size: 190px 150px;
+      transition:
+        border-color 0.16s ease-out,
+        box-shadow 0.16s ease-out,
+        transform 0.08s ease-out;
+    }
+
+    .channel-card:hover {
+      border-color: #38bdf8;
+      box-shadow:
+        0 0 0 1px rgba(56, 189, 248, 0.45),
+        0 10px 26px rgba(15, 23, 42, 0.75);
+      transform: translateY(-1px);
+    }
+
+    .channel-card.active {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+    }
+
+    .channel-thumb {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      width: 100%;
+      display: block;
+      background: #020617;
+    }
+
+    .category-btn.btn-outline-light {
+      border-color: rgba(148, 163, 184, 0.55);
+      color: #e5e7eb;
+    }
+
+    .category-btn.btn-outline-light:hover,
+    .category-btn.btn-outline-light:focus-visible {
+      background: rgba(59, 130, 246, 0.18);
+      border-color: #38bdf8;
+      color: #f9fafb;
+    }
+
+    @media (max-width: 767.98px) {
+      .app-shell {
+        padding-left: 0.45rem;
+        padding-right: 0.45rem;
+      }
+
+      .video-wrap {
+        --bs-aspect-ratio: 56.25%;
+      }
+
+      .comments-feed {
+        min-height: 170px;
+        max-height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container-fluid app-shell py-3 py-md-4">
+    <header class="d-flex flex-column flex-md-row align-items-md-center gap-3 mb-3">
+      <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <h1 class="h4 mb-0">LiveTV</h1>
       </div>
 
-      <label class="search-wrap flex h-[46px] items-center gap-2 rounded-full border border-white/20 bg-slate-800/55 px-3.5 transition focus-within:border-cyan-400/90 focus-within:shadow-[0_0_0_4px_rgba(18,208,255,0.16)]" for="searchInput">
-        <svg class="h-[18px] w-[18px] text-slate-300" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21 21L15.8 15.8M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-        </svg>
-        <input id="searchInput" class="w-full border-0 bg-transparent p-0 text-[0.95rem] text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-0" type="search" placeholder="Search channels..." autocomplete="off" />
-      </label>
+      <div class="search-area position-relative flex-grow-1">
+        <label for="searchInput" class="visually-hidden">Search channels</label>
+        <input
+          id="searchInput"
+          class="form-control search-control"
+          type="search"
+          placeholder="Search channels..."
+          autocomplete="off"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="searchPopupList"
+          aria-autocomplete="list"
+        />
+        <div id="searchPopup" class="search-popup hidden position-absolute start-0 end-0 mt-2" role="listbox" aria-label="Search results">
+          <div id="searchPopupList"></div>
+        </div>
+      </div>
     </header>
 
-    <main class="layout grid items-start gap-[22px] xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-      <section class="player-panel rounded-[18px] border border-slate-300/20 bg-slate-900/80 p-[14px] shadow-panel backdrop-blur-md">
-        <div class="video-wrap relative aspect-video overflow-hidden rounded-[14px] border border-white/10 bg-[#04070e]">
-          <video id="videoPlayer" class="video-player block h-full w-full bg-[#010307]" controls playsinline preload="metadata"></video>
+    <section id="mainContent" class="row g-3">
+      <div class="col-xl-8">
+        <section class="surface player-panel p-2 p-md-3">
+          <div class="video-wrap ratio ratio-16x9 position-relative overflow-hidden rounded-3">
+            <video id="videoPlayer" class="video-element" controls playsinline preload="metadata" aria-label="Live stream player"></video>
 
-          <div id="bufferingOverlay" class="buffering-overlay hidden absolute inset-0 place-items-center content-center gap-2.5 bg-slate-950/70 text-sm text-slate-200" aria-live="polite">
-            <div class="h-11 w-11 animate-spin rounded-full border-4 border-white/25 border-t-cyan-400"></div>
-            <p class="m-0">Buffering stream...</p>
+            <div id="bufferingOverlay" class="hidden position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center bg-dark bg-opacity-75" style="z-index: 2;">
+              <div class="spinner-border text-info mb-2" role="status" aria-hidden="true"></div>
+              <p class="mb-0 small">Buffering stream...</p>
+            </div>
           </div>
-        </div>
 
-        <div class="now-playing mt-3.5 flex items-center justify-between gap-3 max-[680px]:flex-col max-[680px]:items-start">
-          <div>
-            <p class="meta-label m-0 text-xs text-slate-400">Now Playing</p>
-            <h2 id="nowPlayingName" class="font-display text-[clamp(1rem,1.3vw,1.2rem)]">Select a channel</h2>
+          <div class="pt-3 px-1">
+            <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+              <div>
+                <p class="small text-secondary mb-1">Live Now</p>
+                <h2 id="nowPlayingName" class="h5 mb-1">Select a channel</h2>
+                <p id="streamSummary" class="small text-secondary mb-0">Choose a channel from the list to start watching.</p>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <span id="streamStatus" class="badge rounded-pill text-bg-danger-subtle border border-danger-subtle">Idle</span>
+                <span id="nowPlayingCategory" class="badge rounded-pill text-bg-success-subtle border border-success-subtle">General</span>
+                <span id="viewerCountChip" class="badge rounded-pill text-bg-secondary border border-secondary-subtle">0 watching</span>
+              </div>
+            </div>
+            <p id="metaNotice" class="small text-secondary mt-2 mb-0">Stream context updates when you switch channels.</p>
           </div>
-          <div class="meta-chips flex gap-2">
-            <span id="nowPlayingCategory" class="chip inline-flex items-center whitespace-nowrap rounded-full border border-emerald-300/35 bg-emerald-300/10 px-2.5 py-1.5 text-xs text-emerald-200">General</span>
-            <span id="streamStatus" class="chip chip-soft inline-flex items-center whitespace-nowrap rounded-full border border-cyan-300/35 bg-cyan-300/10 px-2.5 py-1.5 text-xs text-cyan-200">Idle</span>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <section class="channels-panel rounded-[18px] border border-slate-300/20 bg-slate-900/70 p-[14px] shadow-panel backdrop-blur-md">
-        <div class="filter-row mb-3 flex flex-wrap gap-2">
-          <button class="category-btn active rounded-full px-3 py-2 text-sm" data-category="All">All</button>
-        </div>
-        <div id="channelGrid" class="channel-grid grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2.5"></div>
-      </section>
-    </main>
-  </div>
+      <div class="col-xl-4">
+        <section class="surface comments-panel p-2 p-md-3 h-100" aria-labelledby="liveChatTitle">
+          <div class="d-flex align-items-center justify-content-between border-bottom border-secondary-subtle pb-2">
+            <h2 id="liveChatTitle" class="h6 mb-0">Live Chat</h2>
+            <span id="chatViewerCount" class="badge rounded-pill text-bg-success-subtle border border-success-subtle">0 online</span>
+          </div>
+          <p id="chatChannelLabel" class="small text-secondary my-2">Room: Lobby</p>
+
+          <div id="commentsFeed" class="comments-feed p-2" role="log" aria-live="polite" aria-relevant="additions text"></div>
+
+          <form id="commentForm" class="mt-2 d-grid gap-2" autocomplete="off">
+            <label for="commentName" class="visually-hidden">Your name</label>
+            <input id="commentName" class="form-control comment-field" type="text" maxlength="40" placeholder="Your name" required />
+            <div class="d-grid gap-2" style="grid-template-columns:1fr auto;">
+              <label for="commentText" class="visually-hidden">Your comment</label>
+              <input id="commentText" class="form-control comment-field" type="text" maxlength="280" placeholder="Write a comment..." required />
+              <button type="submit" class="btn btn-info text-dark fw-semibold px-3">Send</button>
+            </div>
+          </form>
+
+          <p id="commentStatus" class="small text-secondary mt-2 mb-0" role="status" aria-live="polite">Connecting to live chat...</p>
+        </section>
+      </div>
+
+      <div class="col-12">
+        <section class="surface p-2 p-md-3" aria-labelledby="channelListTitle">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+            <h2 id="channelListTitle" class="h6 mb-0">Browse Live Channels</h2>
+            <span id="channelCountLabel" class="badge rounded-pill text-bg-secondary border border-secondary-subtle">0 channels</span>
+          </div>
+
+          <div class="filter-row d-flex flex-wrap gap-2 mb-2">
+            <button class="category-btn btn btn-sm btn-primary" data-category="All">All</button>
+          </div>
+
+          <div id="channelGrid" class="channel-grid row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-6 g-2" role="list" aria-label="Live TV channels"></div>
+        </section>
+      </div>
+    </section>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="assets/js/channels.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/assets/js/comments.js"></script>
 </body>
 </html>

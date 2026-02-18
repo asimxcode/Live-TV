@@ -5,7 +5,7 @@
     "category": "News",
     "country": "BD",
     "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThnVTGTS7dX3rjTijOIpVh-oUAnzdzKX_9-g&s",
-    "streamUrl": "http://160.22.105.17:8881/live/ch1/live.m3u8",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8",
     "priority": 1
   },
   {
@@ -14,7 +14,7 @@
     "category": "News",
     "country": "BD",
     "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiekmWp2YIQMurnkM-1prxkSspFRFbrI-BSw&s",
-    "streamUrl": "http://160.22.105.17:8881/live/ch2/live.m3u8",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8",
     "priority": 2
   },
   {
@@ -23,7 +23,7 @@
     "category": "News",
     "country": "BD",
     "thumbnail": "https://ecdn.dhakatribune.net/contents/cache/images/1200x630x1xxxxx1x694528/uploads/dten/2013/09/Channel24-TV-Bangladesh.jpg?watermark=media%2F2023%2F05%2F28%2F1280px-Dhaka_Tribune_Logo.svg-1-a9e61c86dded62d74300fef48fee558f.png",
-    "streamUrl": "http://160.22.105.17:8881/live/ch3/live.m3u8",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8",
     "priority": 3
   },
   {
@@ -32,7 +32,7 @@
     "category": "News",
     "country": "BD",
     "thumbnail": "https://cdn.ekattorbd.com/contents/cache/images/1200x630x1/uploads/media/2023/08/13/default-f5a63c8327b98eafee564f28c3a9ebdb.png",
-    "streamUrl": "http://160.22.105.17:8881/live/ch5/live.m3u8",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8",
     "priority": 4
   },
   {
@@ -41,7 +41,7 @@
     "category": "News",
     "country": "BD",
     "thumbnail": "https://image.ghuddi.tv/uploads/images/2023/12/21/tv_covers_4062f694e7d8174bf13464efbc16f135_goplay_atn_news_1920_x_1080.png",
-    "streamUrl": "http://160.22.105.17:8881/live/ch6/live.m3u8",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8",
     "priority": 5
   },
   {
@@ -59,7 +59,7 @@
     "category": "News",
     "country": "BD",
     "thumbnail": "https://yt3.googleusercontent.com/JO8MicN497ze8WVXcu-wmA2WAMqhO8UIQhslV3VhiRu1kaQU3r9nOB4IVkmUt0ALC23DVSSp=s900-c-k-c0x00ffffff-no-rj",
-    "streamUrl": "http://160.22.105.17:8881/live/ch4/live.m3u8",
+    "streamUrl": "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8",
     "priority": 7
   },
   {
