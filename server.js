@@ -1,10 +1,13 @@
 const crypto = require("crypto");
 const http = require("http");
+const fsSync = require("fs");
 const fs = require("fs/promises");
 const path = require("path");
 const { Readable } = require("stream");
 const express = require("express");
 const { Server: SocketIOServer } = require("socket.io");
+
+loadDotEnv(path.join(__dirname, ".env"));
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -46,6 +49,54 @@ const hlsChannelTokens = new Map();
 const hlsChannelSegmentWindows = new Map();
 
 app.use(express.json({ limit: "1mb" }));
+
+function loadDotEnv(filePath) {
+  let raw = "";
+  try {
+    raw = fsSync.readFileSync(filePath, "utf8");
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      console.error("Failed to read .env file:", error.message);
+    }
+    return;
+  }
+
+  const lines = raw.split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const match = trimmed.match(/^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+    if (!match) {
+      continue;
+    }
+
+    const key = match[1];
+    let value = match[2] ?? "";
+    const isDoubleQuoted = value.startsWith('"') && value.endsWith('"');
+    const isSingleQuoted = value.startsWith("'") && value.endsWith("'");
+
+    if (isDoubleQuoted || isSingleQuoted) {
+      value = value.slice(1, -1);
+      if (isDoubleQuoted) {
+        value = value
+          .replace(/\\n/g, "\n")
+          .replace(/\\r/g, "\r")
+          .replace(/\\t/g, "\t")
+          .replace(/\\"/g, '"')
+          .replace(/\\\\/g, "\\");
+      }
+    } else {
+      value = value.trim();
+    }
+
+    if (process.env[key] === undefined) {
+      process.env[key] = value;
+    }
+  }
+}
 
 function normalizeAdminPath(value) {
   let adminPath = String(value || "").trim();

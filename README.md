@@ -55,6 +55,8 @@ LiveTV/
 - `ADMIN_PASSWORD` (default: `admin123`)
 - `ADMIN_PATH` (default: `/control-room`)
 
+The app auto-loads `.env` from the project root at startup.
+
 Example PowerShell:
 
 ```powershell
